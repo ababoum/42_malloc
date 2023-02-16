@@ -3,6 +3,29 @@
 t_zones g_zones = {.tiny = NULL, .small = NULL, .large = NULL};
 
 
+/**
+ * Creates a new block of memory
+ * @param ptr The pointer to the memory zone allocated with mmap
+ * @param type The type of the memory zone (TINY, SMALL, LARGE)
+ * @param size The size of the memory zone
+ */
+t_block *new_block(void *ptr, e_zone type, size_t size)
+{
+    t_block *block = (t_block *)MMAP(NULL, sizeof(t_block));
+    block->next = NULL;
+    block->prev = NULL;
+    block->size = size;
+    block->ptr = ptr;
+    block->free = 1;
+    block->type = type;
+    return block;
+}
+
+/**
+ * Displays an unsigned long integer (address) on the standard output 
+ * in hexadecimal format
+ * @param n The address to display
+ */
 void ft_puthex(unsigned long int n)
 {
     char *hex = "0123456789abcdef";
@@ -11,6 +34,10 @@ void ft_puthex(unsigned long int n)
     ft_putchar_fd(hex[n % 16], 1);
 }
 
+/**
+ * Allocates a memory zone of the given size
+ * @param size The size of the memory zone to allocate
+ */
 void *ft_malloc(size_t size)
 {
     if (size == 0)
@@ -35,7 +62,9 @@ void *ft_malloc(size_t size)
     return ptr;
 }
 
-
+/**
+ * Displays the state of the allocated memory zone
+ */
 void show_alloc_mem(void)
 {
     ft_putstr_fd("TINY : 0x", 1);
