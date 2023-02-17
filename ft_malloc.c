@@ -9,16 +9,16 @@ t_zones g_zones = {.tiny = NULL, .small = NULL, .large = NULL};
  * @param type The type of the memory zone (TINY, SMALL, LARGE)
  * @param size The size of the memory zone
  */
-t_block *new_block(void *ptr, e_zone type, size_t size)
+t_zone *new_zone(e_zone_type type)
 {
-    t_block *block = (t_block *)MMAP(NULL, sizeof(t_block));
-    block->next = NULL;
-    block->prev = NULL;
-    block->size = size;
-    block->ptr = ptr;
-    block->free = 1;
-    block->type = type;
-    return block;
+    void *ptr;
+
+    if (type == TINY)
+        ptr = MMAP(0, 4 * getpagesize());
+    else if (type == SMALL)
+        ptr = MMAP(0, SMALL_SIZE);
+    else if (type == LARGE)
+        ptr = MMAP(0, )
 }
 
 /**
@@ -34,6 +34,16 @@ void ft_puthex(unsigned long int n)
     ft_putchar_fd(hex[n % 16], 1);
 }
 
+
+void *get_tiny_address()
+{
+    if (g_zones.tiny == NULL)
+    {
+        g_zones.tiny = new_zone(TINY);
+    }
+
+}
+
 /**
  * Allocates a memory zone of the given size
  * @param size The size of the memory zone to allocate
@@ -47,13 +57,7 @@ void *ft_malloc(size_t size)
     void *hint;
 
     if (size <= TINY_LIMIT) {
-        hint = g_zones.tiny == NULL ? NULL : g_zones.tiny + size;
-        ptr = mmap(hint, size,
-                            PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANON | MAP_PRIVATE,
-                            -1, 0);
-        if (g_zones.tiny == NULL) {
-            g_zones.tiny = ptr;
-        }
+        ptr = get_tiny_address();
     }
 
     if (ptr == MAP_FAILED)
