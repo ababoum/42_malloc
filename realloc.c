@@ -11,7 +11,7 @@ void	*realloc(void *ptr, size_t size)
         return NULL;
     }
 
-    int qty_to_copy = 0;
+    size_t qty_to_copy = 0;
     t_block *block = search_addr(g_zones.tiny, ptr);
     t_zone *zone;
     if (block)
@@ -25,10 +25,23 @@ void	*realloc(void *ptr, size_t size)
         {
             zone = search_large_addr(ptr);
             if (zone)
-                qty_to_copy = zone->size;
+                qty_to_copy = min(zone->size, size);
+            else
+                return NULL;
         }
     }
-    (void)qty_to_copy;
-
-    return NULL;
+    if (qty_to_copy == size)
+    {
+        if (block)
+            block->size = size;
+        else
+            zone->size = size;
+        return ptr;
+    }
+    void *new_ptr = malloc(size);
+    if (new_ptr == NULL)
+        return NULL;
+    ft_memcpy(new_ptr, ptr, qty_to_copy);
+    free(ptr);
+    return new_ptr;
 }

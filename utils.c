@@ -13,7 +13,7 @@ void ft_puthex(unsigned long int n)
     ft_putchar_fd(hex[n % 16], 1);
 }
 
-void *memcpy(void *dest, const void *src, size_t n)
+void *ft_memcpy(void *dest, const void *src, size_t n)
 {
     int *d_i;
     const int *s_i;

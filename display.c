@@ -13,7 +13,7 @@ static unsigned long int show_block_mem(t_block *block)
     if (block->free == 0)
     {
         ft_putstr_fd("0x", 1);
-        ft_puthex((unsigned long int)block);
+        ft_puthex((unsigned long int)block + sizeof(t_block));
         ft_putstr_fd(" - 0x", 1);
         ft_puthex((unsigned long int)block + block->size + sizeof(t_block));
         ft_putstr_fd(" : ", 1);
@@ -49,7 +49,7 @@ static unsigned long int show_large_zones(void)
     while (zone)
     {
         ft_putstr_fd("0x", 1);
-        ft_puthex((unsigned long int)zone);
+        ft_puthex((unsigned long int)zone + sizeof(t_zone));
         ft_putstr_fd(" - 0x", 1);
         ft_puthex((unsigned long int)zone + zone->size + sizeof(t_zone));
         total += zone->size;

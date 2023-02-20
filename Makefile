@@ -14,7 +14,7 @@ endif
 
 CC			= @gcc
 CFLAGS		= -Wall -Wextra -Werror -g -fPIC
-LIGHTFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
+LIGHTFLAGS	= -Wall -Wextra -Werror -g #-fsanitize=address
 
 NAME		= libft_malloc_$(HOSTTYPE).so
 TEST		= test_malloc
@@ -35,9 +35,8 @@ $(NAME): $(OBJ) $(INCLUDES)
 	@echo "$(F_GREEN)$(F_BOLD) $(NAME) library is compiled.$(F_NONE)"
 
 test:
-	@$(CC) $(LIGHTFLAGS) $(SRCS_TEST) -L. -lft_malloc -o $(TEST) $(OBJ_TEST)
-	export LD_LIBRARY_PATH=.
-	@echo "$(F_GREEN)$(F_BOLD) $(TEST) is compiled.$(F_NONE)"
+	@$(CC) $(LIGHTFLAGS) $(SRCS_TEST) -L. -lft_malloc -o $(TEST)
+	@echo "$(F_GREEN)$(F_BOLD) $(TEST) is ready.$(F_NONE)"
 
 clean:
 	@rm -rf $(OBJ) 
