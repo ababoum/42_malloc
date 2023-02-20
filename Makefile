@@ -19,39 +19,34 @@ LIGHTFLAGS	= -Wall -Wextra -Werror -g
 NAME		= libft_malloc_$(HOSTTYPE).so
 TEST		= test_malloc
 
-SRCS		= ft_malloc.c ft_realloc.c ft_free.c
+SRCS		= malloc.c realloc.c free.c utils.c display.c mini_libft.c
 SRCS_TEST	= test.c
 INCLUDES	= libft_malloc.h
 
 OBJ			= $(SRCS:.c=.o)
-LIBFT		= libft/libft.a
-LIBFT_PATH	= libft/
 
 
 all: $(NAME)
 
 
 $(NAME): $(OBJ) $(INCLUDES)
-	make -C $(LIBFT_PATH)
-	@$(CC) -shared -o $(NAME) $(OBJ) -L$(LIBFT_PATH) -lft
+	@$(CC) -shared -o $(NAME) $(OBJ)
 	ln -fs $(NAME) libft_malloc.so
 	@echo "$(F_GREEN)$(F_BOLD) $(NAME) library is compiled.$(F_NONE)"
 
 test:
 	@$(CC) $(LIGHTFLAGS) $(SRCS_TEST) -L. -lft_malloc -o $(TEST) $(OBJ_TEST)
-	$(shell export LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH)
+	export LD_LIBRARY_PATH=.
 	@echo "$(F_GREEN)$(F_BOLD) $(TEST) is compiled.$(F_NONE)"
 
 clean:
 	@rm -rf $(OBJ) 
-	make -C $(LIBFT_PATH) clean
 	@echo "$(F_CYAN)$(F_BOLD) .o files successfully deleted.$(F_NONE)"
 
 fclean: clean
 	@rm -rf $(NAME)
 	@rm -rf libft_malloc.so
 	@rm -rf test_malloc
-	make -C $(LIBFT_PATH) fclean
 	@echo "$(F_CYAN)$(F_BOLD) $(NAME) library successfully deleted.$(F_NONE)"
 
 re: fclean all

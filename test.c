@@ -4,7 +4,7 @@ int main()
 {
     char *test;
 
-    test = ft_malloc(10);
+    test = malloc(10);
     test[0] = 'a';
     test[1] = 'b';
     test[2] = 'c';
@@ -13,11 +13,10 @@ int main()
     test[5] = 0;
 
     printf("test: %s\n", test);
-    // ft_free(test);
 
     char *test2;
 
-    test2 = ft_malloc(10);
+    test2 = malloc(10);
     test2[0] = 'a';
     test2[1] = 'b';
     test2[2] = 'c';

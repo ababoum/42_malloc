@@ -1,13 +1,13 @@
 #include "libft_malloc.h"
 
-void	*ft_realloc(void *ptr, size_t size)
+void	*realloc(void *ptr, size_t size)
 {
     if (ptr == NULL)
-        return ft_malloc(size);
+        return malloc(size);
 
     if (size == 0)
     {
-        ft_free(ptr);
+        free(ptr);
         return NULL;
     }
 

@@ -4,7 +4,6 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "libft/libft.h"
 
 
 # define TINY_LIMIT 128
@@ -12,36 +11,41 @@
 
 
 # define MMAP(addr, size) mmap(addr, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)
+# define BYT(ptr) (char *)ptr
 
-void ft_free(void *ptr);
-void *ft_malloc(size_t size);
-void *ft_realloc(void *ptr, size_t size);
+void free(void *ptr);
+void *malloc(size_t size);
+void *realloc(void *ptr, size_t size);
 
 void show_alloc_mem();
 
+// Utils
+void ft_puthex(unsigned long int n);
+void ft_putchar_fd(char c, int fd);
+size_t ft_strlen(const char *str);
+void ft_putstr_fd(char *s, int fd);
+void ft_putnbr_fd(int n, int fd);
 
-enum e_zone_type
+typedef enum e_zone_type
 {
     TINY,
     SMALL,
     LARGE
-};
+} e_zone_type;
 
-// a block is a piece of memory returned by malloc
+// a block is a piece of memory (inside a zone) returned by malloc
 typedef struct s_block
 {
     size_t size;
     struct s_block *next;
-    struct s_block *prev;
     int free;
 } t_block;
 
-// a zone is composed of a list of pages
+// a zone is a memory area containing blocks
 typedef struct s_zone
 {
     size_t size;
     struct s_zone *next;
-    struct s_zone *prev;
     t_block *blocks;
 } t_zone;
 
