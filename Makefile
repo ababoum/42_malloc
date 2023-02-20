@@ -14,12 +14,12 @@ endif
 
 CC			= @gcc
 CFLAGS		= -Wall -Wextra -Werror -g -fPIC
-LIGHTFLAGS	= -Wall -Wextra -Werror -g
+LIGHTFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
 
 NAME		= libft_malloc_$(HOSTTYPE).so
 TEST		= test_malloc
 
-SRCS		= malloc.c realloc.c free.c utils.c display.c mini_libft.c
+SRCS		= malloc.c realloc.c free.c utils.c display.c mini_libft.c ptr_ops.c
 SRCS_TEST	= test.c
 INCLUDES	= libft_malloc.h
 

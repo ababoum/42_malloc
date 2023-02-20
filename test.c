@@ -9,10 +9,11 @@ int main()
     test[1] = 'b';
     test[2] = 'c';
     test[3] = 'd';
-    test[4] = 'e';
+    test[4] = '\n';
     test[5] = 0;
 
-    printf("test: %s\n", test);
+    ft_putstr_fd(test, 1);
+    free(test);
 
     char *test2;
 
@@ -21,10 +22,11 @@ int main()
     test2[1] = 'b';
     test2[2] = 'c';
     test2[3] = 'd';
-    test2[4] = 'e';
+    test2[4] = '\n';
     test2[5] = 0;
 
-    printf("test2: %s\n", test);
+    ft_putstr_fd(test2, 1);
+    free(test2);
 
     show_alloc_mem();
 

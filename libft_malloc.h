@@ -13,19 +13,6 @@
 # define MMAP(addr, size) mmap(addr, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)
 # define BYT(ptr) (char *)ptr
 
-void free(void *ptr);
-void *malloc(size_t size);
-void *realloc(void *ptr, size_t size);
-
-void show_alloc_mem();
-
-// Utils
-void ft_puthex(unsigned long int n);
-void ft_putchar_fd(char c, int fd);
-size_t ft_strlen(const char *str);
-void ft_putstr_fd(char *s, int fd);
-void ft_putnbr_fd(int n, int fd);
-
 typedef enum e_zone_type
 {
     TINY,
@@ -58,6 +45,27 @@ typedef struct s_zones
 } t_zones;
 
 
+// main functions
+void free(void *ptr);
+void *malloc(size_t size);
+void *realloc(void *ptr, size_t size);
+
+// display functions
+void show_alloc_mem();
+
+// utils
+void ft_puthex(unsigned long int n);
+void ft_putchar_fd(char c, int fd);
+size_t ft_strlen(const char *str);
+void ft_putstr_fd(char *s, int fd);
+void ft_putnbr_fd(int n, int fd);
+
+// pointer operations
+t_zone *go_to_last_zone(t_zone *start);
+t_block *go_to_last_block(t_block *start);
+
+
+// global variable containing the beginning of all the zones
 extern t_zones g_zones;
 
 #endif
