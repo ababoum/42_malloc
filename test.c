@@ -13,7 +13,6 @@ int main()
     test[5] = 0;
 
     ft_putstr_fd(test, 1);
-    free(test);
 
     char *test2;
 
@@ -26,9 +25,11 @@ int main()
     test2[5] = 0;
 
     ft_putstr_fd(test2, 1);
+    
+    show_alloc_mem();
+    free(test);
     free(test2);
 
-    show_alloc_mem();
 
     return (0);
 }

@@ -59,11 +59,14 @@ void ft_putchar_fd(char c, int fd);
 size_t ft_strlen(const char *str);
 void ft_putstr_fd(char *s, int fd);
 void ft_putnbr_fd(int n, int fd);
+void *memcpy(void *dest, const void *src, size_t n);
+size_t min(size_t a, size_t b);
 
 // pointer operations
 t_zone *go_to_last_zone(t_zone *start);
 t_block *go_to_last_block(t_block *start);
-
+t_block* search_addr(t_zone *zone_list, void *ptr);
+t_zone *search_large_addr(void *ptr);
 
 // global variable containing the beginning of all the zones
 extern t_zones g_zones;
