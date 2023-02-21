@@ -12,6 +12,7 @@ t_block *new_block(void *starting_addr, size_t size)
     t_block *block = (t_block *)starting_addr;
     block->size = size;
     block->next = NULL;
+    block->prev = NULL;
     block->free = 0;
     return block;
 }
@@ -20,6 +21,8 @@ t_block *new_block(void *starting_addr, size_t size)
  * Creates a new zone of memory
  * @param type The type of the memory zone (TINY or SMALL only)
  * @param size The size of the memory zone
+ * @return The new zone
+ * @note The zone's header is included in the size
  */
 t_zone *new_zone(e_zone_type type, size_t size)
 {
@@ -86,6 +89,39 @@ static void *get_large_address(size_t size)
     return BYT(ptr) + sizeof(t_zone);
 }
 
+static t_block *allocate_from_free_block(size_t size, e_zone_type type)
+{
+    t_zone *zone = type == TINY ? g_zones.tiny : g_zones.small;
+    t_block *block;
+
+    while (zone)
+    {
+        block = zone->blocks;
+        while (block)
+        {
+            if (block->free && block->size >= size)
+            {
+                block->free = 0;
+                // check if we can split the block to take only the needed size
+                if (block->size > size + sizeof(t_block))
+                {
+                    t_block *tmp_next = block->next;
+                    block->next = new_block(
+                        BYT(block) + sizeof(t_block) + size,
+                        block->size - size - sizeof(t_block));
+                    block->next->prev = block;
+                    block->next->next = tmp_next;
+                    block->size = size;
+                }
+                return block;
+            }
+            block = block->next;
+        }
+        zone = zone->next;
+    }
+    return NULL;
+}
+
 static void *get_tiny_address(size_t size)
 {
     if (g_zones.tiny == NULL)
@@ -98,12 +134,18 @@ static void *get_tiny_address(size_t size)
     }
     else
     {
+        // try to allocate in a freed block
+        t_block *block = allocate_from_free_block(size, TINY);
+        if (block)
+            return BYT(block) + sizeof(t_block);
+        // else, create a new block at the end of the last zone
         t_zone *last_zone = go_to_last_zone(g_zones.tiny);
         t_block *last_block = go_to_last_block(last_zone->blocks);
         if (net_remaining_space(last_zone) >= size + sizeof(t_block))
         {
             last_block->next = new_block(
                 BYT(last_block) + sizeof(t_block) + last_block->size, size);
+            last_block->next->prev = last_block;
             return BYT(last_block->next) + sizeof(t_block);
         }
         else
@@ -112,7 +154,7 @@ static void *get_tiny_address(size_t size)
             if (last_zone->next == NULL)
                 return NULL;
             last_zone->next->blocks = new_block(
-                last_zone->next + sizeof(t_zone), size);
+                BYT(last_zone->next) + sizeof(t_zone), size);
             return BYT(last_zone->next->blocks) + sizeof(t_block);
         }
     }
@@ -130,12 +172,18 @@ static void *get_small_address(size_t size)
     }
     else
     {
+        // try to allocate in a freed block
+        t_block *block = allocate_from_free_block(size, SMALL);
+        if (block)
+            return BYT(block) + sizeof(t_block);
+        // else, create a new block at the end of the last zone
         t_zone *last_zone = go_to_last_zone(g_zones.small);
         t_block *last_block = go_to_last_block(last_zone->blocks);
         if (net_remaining_space(last_zone) >= size + sizeof(t_block))
         {
             last_block->next = new_block(
                 BYT(last_block) + sizeof(t_block) + last_block->size, size);
+            last_block->next->prev = last_block;
             return BYT(last_block->next) + sizeof(t_block);
         }
         else

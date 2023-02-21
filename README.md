@@ -10,3 +10,6 @@
 
 * No re-use of freed blocks, but occasional operations to free empty zones.
 
+## Notes
+
+* Check why the munmap unvalidates the global variable (function: clean empty zones)
