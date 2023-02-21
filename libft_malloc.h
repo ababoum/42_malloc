@@ -7,7 +7,7 @@
 
 
 # define TINY_LIMIT 128
-# define SMALL_LIMIT 512
+# define SMALL_LIMIT 1024
 
 
 # define MMAP(addr, size) mmap(addr, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)

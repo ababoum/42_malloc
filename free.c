@@ -38,19 +38,11 @@ void erase_empty_zones(t_zone *zone_list)
         }
         zone = zone->next;
     }
-
 }
 
-static int free_block(t_block *block)
-{
-    if (block)
-    {
-        block->free = 1;
-        return 1;
-    }
-    return 0;
-}
-
+/**
+ * Frees empty zones in the large zone list
+*/
 static void free_zone(t_zone *zone)
 {
     if (zone == NULL)
@@ -75,11 +67,19 @@ void free(void *ptr)
     if (ptr == NULL)
         return ;
     block = search_addr(g_zones.tiny, ptr);
-    if (block && free_block(block))
+    if (block)
+    {
+        block->free = 1;
         return ;
+    }
     block = search_addr(g_zones.small, ptr);
-    if (block && free_block(block))
+    if (block)
+    {
+        block->free = 1;
         return ;
+    }
     zone = search_large_addr(ptr);
     free_zone(zone);
+    erase_empty_zones(g_zones.tiny);
+    erase_empty_zones(g_zones.small);
 }

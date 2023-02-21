@@ -24,14 +24,16 @@ t_block *new_block(void *starting_addr, size_t size)
 t_zone *new_zone(e_zone_type type, size_t size)
 {
     void *ptr;
+    size_t tiny_init_pages = 128 * TINY_LIMIT / getpagesize();
+    size_t small_init_pages = 128 * SMALL_LIMIT / getpagesize();
 
     if (type == TINY) {
-        ptr = MMAP(0, 4 * getpagesize());
-        size = 4 * getpagesize();
+        size = tiny_init_pages * getpagesize();
+        ptr = MMAP(0, size);
     }
     else if (type == SMALL) {
-        ptr = MMAP(0, 16 * getpagesize());
-        size = 16 * getpagesize();
+        size = small_init_pages * getpagesize();
+        ptr = MMAP(0, size);
     }
     if (ptr == MAP_FAILED)
         return NULL;
@@ -101,7 +103,7 @@ static void *get_tiny_address(size_t size)
         if (net_remaining_space(last_zone) >= size + sizeof(t_block))
         {
             last_block->next = new_block(
-                last_block + sizeof(t_block) + last_block->size, size);
+                BYT(last_block) + sizeof(t_block) + last_block->size, size);
             return BYT(last_block->next) + sizeof(t_block);
         }
         else
@@ -133,7 +135,7 @@ static void *get_small_address(size_t size)
         if (net_remaining_space(last_zone) >= size + sizeof(t_block))
         {
             last_block->next = new_block(
-                last_block + sizeof(t_block) + last_block->size, size);
+                BYT(last_block) + sizeof(t_block) + last_block->size, size);
             return BYT(last_block->next) + sizeof(t_block);
         }
         else
@@ -142,7 +144,7 @@ static void *get_small_address(size_t size)
             if (last_zone->next == NULL)
                 return NULL;
             last_zone->next->blocks = new_block(
-                last_zone->next + sizeof(t_zone), size);
+                BYT(last_zone->next) + sizeof(t_zone), size);
             return BYT(last_zone->next->blocks) + sizeof(t_block);
         }
     }
@@ -154,6 +156,7 @@ static void *get_small_address(size_t size)
  */
 void *malloc(size_t size)
 {
+    // ft_putstr_fd("\033[31mft_malloc called\033[37;0m\n", 2);
     if (size == 0)
         return NULL;
 

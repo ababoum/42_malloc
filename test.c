@@ -27,9 +27,18 @@ int main()
     ft_putstr_fd(test2, 1);
     
     show_alloc_mem();
-    free(test);
-    free(test2);
 
+    int i = 0;
+    char *addr;
+
+    while (i < 1024)
+    {
+        addr = (char*)malloc(1024);
+        addr[0] = 42;
+        i++;
+    }
+
+    show_alloc_mem();
 
     return (0);
 }
