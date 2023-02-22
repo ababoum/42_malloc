@@ -1,4 +1,4 @@
-#include "libft_malloc.h"
+#include "../inc/libft_malloc.h"
 
 /**
     * Erases all the empty zones from the zone list
@@ -13,6 +13,11 @@ void erase_empty_zones(t_zone *zone_list)
 
     while(zone)
     {
+        // do not unmap the first zone of each type to preserve the global variable
+        if (zone == g_zones.large || zone == g_zones.tiny) {
+            zone = zone->next;
+            continue ;
+        }
         zone_empty = 1;
         block = zone->blocks;
         tmp_next = zone->next;

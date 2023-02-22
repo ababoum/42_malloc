@@ -1,4 +1,4 @@
-#include "libft_malloc.h"
+#include "../inc/libft_malloc.h"
 
 t_zone *go_to_last_zone(t_zone *start)
 {

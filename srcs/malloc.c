@@ -1,4 +1,4 @@
-#include "libft_malloc.h"
+#include "../inc/libft_malloc.h"
 
 t_zones g_zones = {.tiny = NULL, .small = NULL, .large = NULL};
 
@@ -113,6 +113,8 @@ static t_block *allocate_from_free_block(size_t size, e_zone_type type)
                     block->next->next = tmp_next;
                     block->size = size;
                 }
+                /* if we can't split it, we just take the whole block even if 
+                the size is a bit bigger */
                 return block;
             }
             block = block->next;

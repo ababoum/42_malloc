@@ -1,4 +1,4 @@
-#include "libft_malloc.h"
+#include "../inc/libft_malloc.h"
 
 /**
  * Displays the state of the allocated memory zone

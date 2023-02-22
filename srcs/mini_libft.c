@@ -1,4 +1,4 @@
-#include "libft_malloc.h"
+#include "../inc/libft_malloc.h"
 
 void	ft_putchar_fd(char c, int fd)
 {

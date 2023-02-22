@@ -19,9 +19,12 @@ LIGHTFLAGS	= -Wall -Wextra -Werror -g #-fsanitize=address
 NAME		= libft_malloc_$(HOSTTYPE).so
 TEST		= test_malloc
 
-SRCS		= malloc.c realloc.c free.c utils.c display.c mini_libft.c ptr_ops.c
+SRCS		= srcs/malloc.c srcs/realloc.c srcs/free.c \
+				srcs/utils.c srcs/display.c srcs/mini_libft.c \
+				srcs/ptr_ops.c
+
 SRCS_TEST	= test.c
-INCLUDES	= libft_malloc.h
+INCLUDES	= inc/libft_malloc.h
 
 OBJ			= $(SRCS:.c=.o)
 
