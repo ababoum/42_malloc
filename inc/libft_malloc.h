@@ -5,13 +5,12 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#define TINY_LIMIT 128
+#define SMALL_LIMIT 1024
 
-# define TINY_LIMIT 128
-# define SMALL_LIMIT 1024
-
-
-# define MMAP(addr, size) mmap(addr, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)
-# define BYT(ptr) (char *)ptr
+#define MMAP(addr, size) mmap(addr, size, \
+                              PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)
+#define BYT(ptr) (char *)ptr
 
 typedef enum e_zone_type
 {
@@ -45,7 +44,6 @@ typedef struct s_zones
     t_zone *large;
 } t_zones;
 
-
 // main functions
 void free(void *ptr);
 void *malloc(size_t size);
@@ -66,7 +64,7 @@ size_t min(size_t a, size_t b);
 // pointer operations
 t_zone *go_to_last_zone(t_zone *start);
 t_block *go_to_last_block(t_block *start);
-t_block* search_addr(t_zone *zone_list, void *ptr);
+t_block *search_addr(t_zone *zone_list, void *ptr);
 t_zone *search_large_addr(void *ptr);
 
 // global variable containing the beginning of all the zones

@@ -14,7 +14,7 @@ void erase_empty_zones(t_zone *zone_list)
     while(zone)
     {
         // do not unmap the first zone of each type to preserve the global variable
-        if (zone == g_zones.large || zone == g_zones.tiny) {
+        if (zone == (t_zone *)g_zones.small || zone == (t_zone *)g_zones.tiny) {
             zone = zone->next;
             continue ;
         }

@@ -27,8 +27,8 @@ t_block *new_block(void *starting_addr, size_t size)
 t_zone *new_zone(e_zone_type type, size_t size)
 {
     void *ptr;
-    size_t tiny_init_pages = 128 * TINY_LIMIT / getpagesize();
-    size_t small_init_pages = 128 * SMALL_LIMIT / getpagesize();
+    size_t tiny_init_pages = (128 * TINY_LIMIT / getpagesize());
+    size_t small_init_pages = (128 * SMALL_LIMIT / getpagesize());
 
     if (type == TINY) {
         size = tiny_init_pages * getpagesize();

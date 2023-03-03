@@ -25,7 +25,7 @@ int main()
     test2[5] = 0;
 
     ft_putstr_fd(test2, 1);
-    
+
     show_alloc_mem();
     free(test);
     free(test2);

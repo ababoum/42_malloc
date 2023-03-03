@@ -15,20 +15,15 @@ void ft_puthex(unsigned long int n)
 
 void *ft_memcpy(void *dest, const void *src, size_t n)
 {
-    int *d_i;
-    const int *s_i;
-    char *d_c;
-    const char *s_c;
+    size_t i;
 
-    d_i = dest;
-    s_i = src;
-    while (n-- > sizeof(int))
-        *d_i++ = *s_i++;
-    d_c = (char *)d_i;
-    s_c = (char *)s_i;
-    while (n-- > 0)
-        *d_c++ = *s_c++;
-    return dest;
+    i = 0;
+    while (i < n)
+    {
+        ((char *)dest)[i] = ((char *)src)[i];
+        i++;
+    }
+    return (dest);
 }
 
 size_t min(size_t a, size_t b)
